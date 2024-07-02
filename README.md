@@ -1,3 +1,2 @@
-# Deploying EKS Cluster with Jenkins and Terraform
-
-This project demonstrates an automated approach to deploying an Amazon Elastic Kubernetes Service (EKS) cluster using Terraform and Jenkins.
+# ArgoCD-Starter
+Get your Argo CD deployments up and running quickly with this toolkit. It includes necessary EKS Terraform configurations and CI/CD scripts, perfect for enhancing your DevOps process
