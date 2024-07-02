@@ -23,7 +23,7 @@ pipeline {
           checkout scmGit(
               branches: [[name: '*/main']],
               extensions: [],
-              userRemoteConfigs: [[url: 'https://github.com/kartik-rathore/terraform-jenkins-eks.git']]
+              userRemoteConfigs: [[url: 'https://github.com/kartik-rathore/ArgoCD-Starter.git']]
           )
         }
       }
