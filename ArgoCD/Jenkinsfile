@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    environment {
+        EKS_CLUSTER_NAME = 'kartik-eks-jenkins-terraform'
+        ARGOCD_NAMESPACE = 'argocd'
+        ARGOCD_VERSION = 'stable'
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_DEFAULT_REGION = "us-east-1"
+    }
+
+    stages {
+        stage('Configure Kubernetes Credentials') {
+            steps {
+                script {
+                    dir('EKS/K8s-ConfigurationFiles') {
+                        sh "aws eks update-kubeconfig --name ${env.EKS_CLUSTER_NAME}"
+                    }
+                }
+            }
+        }
+
+        stage('Install ArgoCD') {
+            steps {
+                script {
+                    dir('EKS/K8s-ConfigurationFiles') {
+                        sh """
+                            kubectl create namespace ${env.ARGOCD_NAMESPACE} || true
+                            kubectl apply -n ${env.ARGOCD_NAMESPACE} -f https://raw.githubusercontent.com/argoproj/argo-cd/${env.ARGOCD_VERSION}/manifests/install.yaml
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
