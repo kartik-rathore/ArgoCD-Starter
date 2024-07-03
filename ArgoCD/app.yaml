@@ -14,7 +14,7 @@ spec:
     targetRevision: HEAD
     path: EKS/K8s-ConfigurationFiles
   destination:
-    server: https://kubernetes.default.svc
+    server: https://E8184BCE89A4DB4EE0ACB0D4A473CE8C.gr7.us-east-1.eks.amazonaws.com
     namespace: default
   syncPolicy:
     automated:
