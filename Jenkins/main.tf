@@ -75,6 +75,12 @@ module "ec2_instance" {
   associate_public_ip_address = true
   user_data                   = file("jenkins-install.sh")
   availability_zone           = data.aws_availability_zones.azs.names[0]
+ root_block_device = [
+    {
+      volume_type = "gp2"
+      volume_size = 15 # Specify the desired volume size in GB
+    }
+  ]
 
   tags = {
     Name        = "Jenkins-Server"
@@ -82,8 +88,3 @@ module "ec2_instance" {
     Environment = "dev"
   }
 }
-
-
-
-
-
