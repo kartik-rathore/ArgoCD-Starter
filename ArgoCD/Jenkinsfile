@@ -11,24 +11,37 @@ pipeline {
     }
 
     stages {
+                stage('Checkout SCM') {
+            steps {
+                script {
+                    checkout scmGit(
+                        branches: [[name: '*/main']],
+                        extensions: [],
+                        userRemoteConfigs: [[url: 'https://github.com/kartik-rathore/ArgoCD-Starter.git']]
+                    )
+                }
+            }
+        }
         stage('Configure Kubernetes Credentials') {
             steps {
                 script {
-                    dir('EKS/K8s-ConfigurationFiles') {
-                        sh "aws eks update-kubeconfig --name ${env.EKS_CLUSTER_NAME}"
-                    }
+                    sh "aws eks update-kubeconfig --name ${env.EKS_CLUSTER_NAME}"
                 }
             }
         }
 
-        stage('Install ArgoCD') {
+        stage('Deploy ArgoCD') {
             steps {
                 script {
-                    dir('EKS/K8s-ConfigurationFiles') {
-                        sh """
-                            kubectl create namespace ${env.ARGOCD_NAMESPACE} || true
-                            kubectl apply -n ${env.ARGOCD_NAMESPACE} -f https://raw.githubusercontent.com/argoproj/argo-cd/${env.ARGOCD_VERSION}/manifests/install.yaml
-                        """
+                    dir('ArgoCD') {
+                        // Create the ArgoCD namespace if it doesn't exist
+                        sh "kubectl create namespace ${env.ARGOCD_NAMESPACE} || true"
+
+                        // Apply the ArgoCD installation manifests
+                        sh "kubectl apply -n ${env.ARGOCD_NAMESPACE} -f https://raw.githubusercontent.com/argoproj/argo-cd/${env.ARGOCD_VERSION}/manifests/install.yaml"
+
+                        // Apply the ArgoCD application configuration
+                        sh "kubectl apply -n ${env.ARGOCD_NAMESPACE} -f app.yaml"
                     }
                 }
             }
