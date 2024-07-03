@@ -10,7 +10,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/kartik-rathore/terraform-jenkins-eks.git
+    repoURL: https://github.com/kartik-rathore/ArgoCD-Starter.git
     targetRevision: HEAD
     path: EKS/K8s-ConfigurationFiles
   destination:
